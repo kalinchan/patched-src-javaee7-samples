@@ -110,7 +110,7 @@ public class ServerOperations {
 
             KeyStore keyStore = null;
             try (InputStream in = new FileInputStream(cacertsPath.toAbsolutePath().toFile())) {
-                keyStore = KeyStore.getInstance("JKS");
+                keyStore = KeyStore.getInstance("PKCS12");
                 keyStore.load(in, "changeit".toCharArray());
 
                 keyStore.setCertificateEntry("arquillianClientTestCert", clientCertificate);
