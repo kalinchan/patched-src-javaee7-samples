@@ -98,7 +98,7 @@ public class ServerOperations {
                 logger.info("Using domain \"" + domain + "\" obtained from server. If this is not correct use -Dpayara_domain to override.");
             }
 
-            Path cacertsPath = gfHomePath.resolve("glassfish/domains/" + domain + "/config/cacerts.jks");
+            Path cacertsPath = gfHomePath.resolve("glassfish/domains/" + domain + "/config/cacerts.p12");
 
             if (!cacertsPath.toFile().exists()) {
                 logger.severe("The container trust store at " + cacertsPath.toAbsolutePath() + " does not exists");
@@ -221,6 +221,14 @@ public class ServerOperations {
                 System.out.println(javaEEServer + " not supported");
             }
         }
+    }
+
+    public static void disableTLSV13() {
+        List<String> cmd = new ArrayList<>();
+        cmd.add("set");
+        cmd.add("configs.config.server-config.network-config.protocols.protocol.http-listener-2.ssl.tls13-enabled=false");
+
+        CliCommands.payaraGlassFish(cmd);
     }
 
     public static void restartContainer() {

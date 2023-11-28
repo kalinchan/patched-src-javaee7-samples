@@ -1,33 +1,8 @@
 /** Copyright Payara Services Limited **/
 package org.javaee7.servlet.security.clientcert;
 
-import static java.math.BigInteger.ONE;
-import static java.time.Instant.now;
-import static java.time.temporal.ChronoUnit.DAYS;
-import static java.util.logging.Level.FINEST;
-import static org.javaee7.ServerOperations.addCertificateToContainerTrustStore;
-import static org.javaee7.ServerOperations.addContainerSystemProperty;
-import static org.jboss.shrinkwrap.api.ShrinkWrap.create;
-import static org.junit.Assert.assertTrue;
-import static org.omnifaces.utils.Lang.isEmpty;
-import static org.omnifaces.utils.security.Certificates.createTempJKSKeyStore;
-import static org.omnifaces.utils.security.Certificates.createTempJKSTrustStore;
-import static org.omnifaces.utils.security.Certificates.generateRandomRSAKeys;
-import static org.omnifaces.utils.security.Certificates.getCertificateChainFromServer;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.KeyPair;
-import java.security.Provider;
-import java.security.Security;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Date;
-import java.util.logging.Logger;
-
+import com.gargoylesoftware.htmlunit.TextPage;
+import com.gargoylesoftware.htmlunit.WebClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.impl.Jdk14Logger;
@@ -49,8 +24,28 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.omnifaces.utils.security.Certificates;
 
-import com.gargoylesoftware.htmlunit.TextPage;
-import com.gargoylesoftware.htmlunit.WebClient;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.KeyPair;
+import java.security.Provider;
+import java.security.Security;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Date;
+import java.util.logging.Logger;
+
+import static java.math.BigInteger.ONE;
+import static java.time.Instant.now;
+import static java.time.temporal.ChronoUnit.DAYS;
+import static java.util.logging.Level.FINEST;
+import static org.javaee7.ServerOperations.*;
+import static org.jboss.shrinkwrap.api.ShrinkWrap.create;
+import static org.junit.Assert.assertTrue;
+import static org.omnifaces.utils.Lang.isEmpty;
+import static org.omnifaces.utils.security.Certificates.*;
 
 /**
  * @author Arjan Tijms
@@ -73,6 +68,7 @@ public class SecureServletTest {
     public static WebArchive createDeployment() throws FileNotFoundException, IOException {
 
         System.out.println("\n*********** DEPLOYMENT START ***************************");
+        disableTLSV13();
         
         Security.addProvider(new BouncyCastleProvider());
 
@@ -263,5 +259,4 @@ public class SecureServletTest {
         ((Jdk14Logger) logger).getLogger().setLevel(FINEST);
         Logger.getGlobal().getParent().getHandlers()[0].setLevel(FINEST);
     }
-
 }

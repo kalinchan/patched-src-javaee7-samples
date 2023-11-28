@@ -5,8 +5,7 @@ import static java.math.BigInteger.ONE;
 import static java.time.Instant.now;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.logging.Level.FINEST;
-import static org.javaee7.ServerOperations.addCertificateToContainerTrustStore;
-import static org.javaee7.ServerOperations.addContainerSystemProperty;
+import static org.javaee7.ServerOperations.*;
 import static org.jboss.shrinkwrap.api.ShrinkWrap.create;
 import static org.junit.Assert.assertTrue;
 import static org.omnifaces.utils.Lang.isEmpty;
@@ -132,6 +131,7 @@ public class SecureServletTest {
         
         // Only test TLS v1.2 for now
         System.setProperty("jdk.tls.client.protocols", "TLSv1.2");
+        disableTLSV13();
         
         // Enable to get detailed logging about the SSL handshake on the server
         
